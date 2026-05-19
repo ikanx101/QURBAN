@@ -1,0 +1,18 @@
+{
+  "name": "qurban",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build:web": "cd web && npm install && npm run build",
+    "start": "node server.js",
+    "dev": "npm run build:web && node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "csv-parse": "^4.16.3",
+    "express": "^5.2.1"
+  }
+}
