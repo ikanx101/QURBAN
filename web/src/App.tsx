@@ -18,12 +18,69 @@ interface Realisasi {
   Saldo?: string
 }
 
+/* ── Data Ayat & Hadits ── */
+interface AyatItem {
+  type: 'ayat'
+  arab: string
+  arti: string
+  surah: string
+}
+
+interface HaditsItem {
+  type: 'hadits'
+  arab: string
+  arti: string
+  sumber: string
+}
+
+type WahyuItem = AyatItem | HaditsItem
+
+const wahyuList: WahyuItem[] = [
+  {
+    type: 'ayat',
+    arab: 'فَصَلِّ لِرَبِّكَ وَانْحَرْ',
+    arti: 'Maka dirikanlah shalat karena Tuhanmu; dan berqurbanlah (an-Nahr).',
+    surah: 'QS. Al-Kautsar (108): 2',
+  },
+  {
+    type: 'ayat',
+    arab: 'وَالْبُدْنَ جَعَلْنَاهَا لَكُمْ مِنْ شَعَائِرِ اللَّهِ لَكُمْ فِيهَا خَيْرٌ',
+    arti: 'Dan telah Kami jadikan untuk kamu unta-unta itu sebagian dari syi\'ar Allah, kamu memperoleh kebaikan yang banyak padanya.',
+    surah: 'QS. Al-Hajj (22): 36',
+  },
+  {
+    type: 'ayat',
+    arab: 'لَنْ يَنَالَ اللَّهَ لُحُومُهَا وَلَا دِمَاؤُهَا وَلَٰكِنْ يَنَالُهُ التَّقْوَىٰ مِنْكُمْ',
+    arti: 'Daging-daging unta dan darahnya itu sekali-kali tidak dapat mencapai (keridhaan) Allah, tetapi ketakwaan dari kamulah yang dapat mencapainya.',
+    surah: 'QS. Al-Hajj (22): 37',
+  },
+  {
+    type: 'hadits',
+    arab: 'مَا عَمِلَ ابْنُ آدَمَ يَوْمَ النَّحْرِ عَمَلاً أَحَبَّ إِلَى اللَّهِ عَزَّ وَجَلَّ مِنْ هِرَاقَةِ دَمٍ',
+    arti: 'Tidak ada amalan yang dilakukan anak Adam pada hari Nahr (Idul Adha) yang lebih dicintai Allah daripada mengalirkan darah (berqurban).',
+    sumber: 'HR. Tirmidzi & Ibnu Majah',
+  },
+  {
+    type: 'hadits',
+    arab: 'عَنْ عَائِشَةَ أَنَّ رَسُولَ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ قَالَ: مَا عَمِلَ آدَمِيٌّ مِنْ عَمَلٍ يَوْمَ النَّحْرِ أَحَبَّ إِلَى اللَّهِ مِنْ إِهْرَاقِ الدَّمِ',
+    arti: 'Dari Aisyah RA, Rasulullah SAW bersabda: Tidak ada suatu amalan yang dilakukan oleh manusia pada hari Nahr yang lebih dicintai Allah selain menyembelih hewan qurban.',
+    sumber: 'HR. Al-Hakim',
+  },
+  {
+    type: 'hadits',
+    arab: 'إِنَّهَا لَتَأْتِي يَوْمَ الْقِيَامَةِ بِقُرُونِهَا وَأَشْعَارِهَا وَأَظْلَافِهَا وَإِنَّ الدَّمَ لَيَقَعُ مِنْ اللَّهِ بِمَكَانٍ قَبْلَ أَنْ يَقَعَ مِنْ الْأَرْضِ',
+    arti: 'Sesungguhnya hewan qurban itu akan datang pada hari Kiamat dengan tanduk, bulu, dan kuku-kukunya. Dan sesungguhnya darahnya telah sampai di sisi Allah sebelum jatuh ke tanah.',
+    sumber: 'HR. Tirmidzi & Ibnu Majah',
+  },
+]
+
 export default function App() {
   const [page, setPage] = useState<Page>('home')
   const [pengqurban, setPengqurban] = useState<Pengqurban[]>([])
   const [realisasi, setRealisasi] = useState<Realisasi[]>([])
   const [fotoList, setFotoList] = useState<string[]>([])
   const [slideIndex, setSlideIndex] = useState(0)
+  const [wahyuIdx, setWahyuIdx] = useState(0)
 
   useEffect(() => {
     fetch('/api/pengqurban').then(r => r.json()).then(setPengqurban)
@@ -31,6 +88,7 @@ export default function App() {
     fetch('/api/foto').then(r => r.json()).then(setFotoList)
   }, [])
 
+  // Auto-slide foto
   useEffect(() => {
     if (fotoList.length === 0) return
     const timer = setInterval(() => {
@@ -39,15 +97,23 @@ export default function App() {
     return () => clearInterval(timer)
   }, [fotoList])
 
+  // Auto-rotate ayat & hadits
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setWahyuIdx(prev => (prev + 1) % wahyuList.length)
+    }, 6000)
+    return () => clearInterval(timer)
+  }, [])
+
   const navItems: { key: Page; label: string }[] = [
-    { key: 'home', label: 'Beranda' },
-    { key: 'dokumentasi', label: 'Dokumentasi' },
-    { key: 'realisasi', label: 'Realisasi' },
+    { key: 'home', label: '🏠 Beranda' },
+    { key: 'dokumentasi', label: '📸 Dokumentasi' },
+    { key: 'realisasi', label: '💰 Realisasi' },
   ]
 
   return (
     <div className="app">
-      {/* Header */}
+      {/* ── Header ── */}
       <header className="header">
         <div className="header-content">
           <div className="header-title">
@@ -68,9 +134,9 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* ── Main ── */}
       <main className="main">
-        {page === 'home' && <HomePage />}
+        {page === 'home' && <HomePage wahyuIdx={wahyuIdx} setWahyuIdx={setWahyuIdx} />}
         {page === 'dokumentasi' && (
           <DokumentasiPage
             fotoList={fotoList}
@@ -79,64 +145,38 @@ export default function App() {
           />
         )}
         {page === 'realisasi' && (
-          <RealisasiPage
-            pengqurban={pengqurban}
-            realisasi={realisasi}
-          />
+          <RealisasiPage pengqurban={pengqurban} realisasi={realisasi} />
         )}
       </main>
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <footer className="footer">
-        <p>© {new Date().getFullYear()} — dibuat oleh <a href="https://ikanx101.com" target="_blank" rel="noopener noreferrer">ikanx101.com</a></p>
+        <p>© {new Date().getFullYear()} — dibuat oleh{' '}
+          <a href="https://ikanx101.com" target="_blank" rel="noopener noreferrer">ikanx101.com</a>
+        </p>
       </footer>
     </div>
   )
 }
 
-/* ========== HOME PAGE ========== */
-function HomePage() {
-  const verses = [
-    {
-      arab: "فَصَلِّ لِرَبِّكَ وَانْحَرْ",
-      arti: "Maka dirikanlah shalat karena Tuhanmu; dan berqurbanlah (an-Nahr).",
-      surah: "QS. Al-Kautsar (108): 2",
-    },
-    {
-      arab: "وَالْبُدْنَ جَعَلْنَاهَا لَكُمْ مِنْ شَعَائِرِ اللَّهِ لَكُمْ فِيهَا خَيْرٌ",
-      arti: "Dan telah Kami jadikan untuk kamu unta-unta itu sebagian dari syi'ar Allah, kamu memperoleh kebaikan yang banyak padanya.",
-      surah: "QS. Al-Hajj (22): 36",
-    },
-    {
-      arab: "لَنْ يَنَالَ اللَّهَ لُحُومُهَا وَلَا دِمَاؤُهَا وَلَٰكِنْ يَنَالُهُ التَّقْوَىٰ مِنْكُمْ",
-      arti: "Daging-daging unta dan darahnya itu sekali-kali tidak dapat mencapai (keridhaan) Allah, tetapi ketakwaan dari kamulah yang dapat mencapainya.",
-      surah: "QS. Al-Hajj (22): 37",
-    },
-  ]
-
-  const hadits = [
-    {
-      text: "مَا عَمِلَ ابْنُ آدَمَ يَوْمَ النَّحْرِ عَمَلاً أَحَبَّ إِلَى اللَّهِ عَزَّ وَجَلَّ مِنْ هِرَاقَةِ دَمٍ",
-      arti: "Tidak ada amalan yang dilakukan anak Adam pada hari Nahr (Idul Adha) yang lebih dicintai Allah daripada mengalirkan darah (berqurban).",
-      sumber: "HR. Tirmidzi & Ibnu Majah",
-    },
-    {
-      text: "عَنْ عَائِشَةَ أَنَّ رَسُولَ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ قَالَ: مَا عَمِلَ آدَمِيٌّ مِنْ عَمَلٍ يَوْمَ النَّحْرِ أَحَبَّ إِلَى اللَّهِ مِنْ إِهْرَاقِ الدَّمِ",
-      arti: "Dari Aisyah RA, Rasulullah SAW bersabda: Tidak ada suatu amalan yang dilakukan oleh manusia pada hari Nahr yang lebih dicintai Allah selain menyembelih hewan qurban.",
-      sumber: "HR. Al-Hakim",
-    },
-    {
-      text: "إِنَّهَا لَتَأْتِي يَوْمَ الْقِيَامَةِ بِقُرُونِهَا وَأَشْعَارِهَا وَأَظْلَافِهَا وَإِنَّ الدَّمَ لَيَقَعُ مِنْ اللَّهِ بِمَكَانٍ قَبْلَ أَنْ يَقَعَ مِنْ الْأَرْضِ",
-      arti: "Sesungguhnya hewan qurban itu akan datang pada hari Kiamat dengan tanduk, bulu, dan kuku-kukunya. Dan sesungguhnya darahnya telah sampai di sisi Allah sebelum jatuh ke tanah.",
-      sumber: "HR. Tirmidzi & Ibnu Majah",
-    },
-  ]
+/* ================================================================
+   HOME PAGE — Futuristic Carousel
+   ================================================================ */
+function HomePage({
+  wahyuIdx,
+  setWahyuIdx,
+}: {
+  wahyuIdx: number
+  setWahyuIdx: (n: number) => void
+}) {
+  const item = wahyuList[wahyuIdx]
 
   return (
     <div className="page home-page">
-      <section className="hero">
-        <div className="hero-overlay">
-          <h2>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h2>
+      {/* ── Info / Bismillah ── */}
+      <section className="section">
+        <div className="info-card-glass">
+          <h3>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h3>
           <p>
             Laporan keuangan dan dokumentasi pelaksanaan pemotongan hewan qurban
             Mushalla As Salaam tahun 1447 H.
@@ -144,36 +184,38 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="section">
-        <h3 className="section-title">📖 Ayat-Ayat Al-Qur'an tentang Qurban</h3>
-        <div className="verses-grid">
-          {verses.map((v, i) => (
-            <div key={i} className="verse-card">
-              <p className="arabic">{v.arab}</p>
-              <p className="arti">{v.arti}</p>
-              <p className="surah">{v.surah}</p>
-            </div>
+      {/* ── Carousel Hero ── */}
+      <section className="wahyu-carousel">
+        <div className="carousel-glow" />
+        <div className="carousel-badge">
+          {item.type === 'ayat' ? '📖 Ayat Al-Qur\'an' : '📜 Hadits Rasulullah'}
+        </div>
+        <div key={wahyuIdx} className="carousel-content fade-slide-in">
+          <p className="carousel-arab">{item.arab}</p>
+          <p className="carousel-arti">{item.arti}</p>
+          <p className="carousel-sumber">
+            {'surah' in item ? item.surah : `— ${(item as HaditsItem).sumber}`}
+          </p>
+        </div>
+        <div className="carousel-dots">
+          {wahyuList.map((_, i) => (
+            <span
+              key={i}
+              className={`cdot ${i === wahyuIdx ? 'active' : ''}`}
+              onClick={() => setWahyuIdx(i)}
+            />
           ))}
         </div>
       </section>
 
-      <section className="section">
-        <h3 className="section-title">📜 Hadits-Hadits tentang Qurban</h3>
-        <div className="hadits-list">
-          {hadits.map((h, i) => (
-            <div key={i} className="hadits-card">
-              <p className="arabic">{h.text}</p>
-              <p className="arti">{h.arti}</p>
-              <p className="sumber">— {h.sumber}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+
     </div>
   )
 }
 
-/* ========== DOKUMENTASI PAGE ========== */
+/* ================================================================
+   DOKUMENTASI PAGE
+   ================================================================ */
 function DokumentasiPage({
   fotoList,
   slideIndex,
@@ -199,7 +241,11 @@ function DokumentasiPage({
 
   return (
     <div className="page dokumentasi-page">
-      <h2 className="page-title">📸 Dokumentasi Pemotongan Qurban</h2>
+      <h2 className="page-title futuristic-title">
+        <span className="title-line" />
+        <span>📸 Dokumentasi Pemotongan Qurban</span>
+        <span className="title-line" />
+      </h2>
 
       <div className="slideshow-container">
         <button className="slide-btn prev" onClick={prev}>&#10094;</button>
@@ -227,7 +273,9 @@ function DokumentasiPage({
   )
 }
 
-/* ========== REALISASI PAGE ========== */
+/* ================================================================
+   REALISASI PAGE
+   ================================================================ */
 function parseRp(val: string): number {
   if (!val) return 0
   return parseInt(val.replace(/[^0-9]/g, ''), 10) || 0
@@ -244,7 +292,6 @@ function RealisasiPage({
   pengqurban: Pengqurban[]
   realisasi: Realisasi[]
 }) {
-  // Hitung total dari row transaksi (exclude baris SALDO)
   const transaksi = realisasi.filter(r => r.No !== 'SALDO')
   const totalPemasukan = transaksi.reduce((sum, r) => sum + parseRp(r.Pemasukan), 0)
   const totalPengeluaran = transaksi.reduce((sum, r) => sum + parseRp(r.Pengeluaran), 0)
@@ -252,9 +299,13 @@ function RealisasiPage({
 
   return (
     <div className="page realisasi-page">
-      {/* Tabel Pengqurban */}
+      {/* ── Data Pengqurban ── */}
       <section className="section">
-        <h3 className="section-title">👥 Data Pengqurban</h3>
+        <h3 className="section-title futuristic-title">
+          <span className="title-line" />
+          <span>👥 Data Pengqurban</span>
+          <span className="title-line" />
+        </h3>
         <div className="table-responsive">
           <table className="table">
             <thead>
@@ -279,9 +330,13 @@ function RealisasiPage({
         </div>
       </section>
 
-      {/* Tabel Realisasi */}
+      {/* ── Realisasi Keuangan ── */}
       <section className="section">
-        <h3 className="section-title">💰 Realisasi Keuangan</h3>
+        <h3 className="section-title futuristic-title">
+          <span className="title-line" />
+          <span>💰 Realisasi Keuangan</span>
+          <span className="title-line" />
+        </h3>
         <div className="table-responsive">
           <table className="table">
             <thead>
@@ -314,7 +369,8 @@ function RealisasiPage({
           </table>
         </div>
         <div className="saldo-badge">
-          💰 Saldo akhir: <strong>Rp{formatRp(saldo)}</strong>
+          💰 Saldo akhir:{' '}
+          <span className="saldo-glowing">Rp{formatRp(saldo)}</span>
         </div>
       </section>
     </div>
