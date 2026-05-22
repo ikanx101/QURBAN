@@ -113,6 +113,13 @@ export default function App() {
 
   return (
     <div className="app">
+      {/* ── Background Effects ── */}
+      <div className="grid-overlay" />
+      <div className="ambient-orb cyan" />
+      <div className="ambient-orb gold" />
+      <div className="ambient-orb purple" />
+      <div className="scanlines" />
+
       {/* ── Header ── */}
       <header className="header">
         <div className="header-content">
