@@ -1130,3 +1130,356 @@ body {
     font-size: 1rem;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   HERO SECTION — Grand Landing
+   ══════════════════════════════════════════════════════════════ */
+.hero-section {
+  position: relative;
+  text-align: center;
+  padding: 72px 24px 60px;
+  margin-bottom: 44px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid rgba(6, 182, 212, 0.1);
+  background: linear-gradient(
+    180deg,
+    rgba(6, 182, 212, 0.04) 0%,
+    rgba(11, 17, 32, 0.6) 40%,
+    rgba(245, 158, 11, 0.03) 100%
+  );
+  backdrop-filter: blur(4px);
+}
+
+/* Glowing backdrop orb */
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(6, 182, 212, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(245, 158, 11, 0.06) 0%, transparent 55%);
+}
+
+/* ── Decorative Ornament ── */
+.hero-ornament {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 40px;
+}
+
+.ornament-ring {
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ornament-ring.outer {
+  width: 110px;
+  height: 110px;
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  animation: ringRotate 24s linear infinite;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.08);
+}
+
+.ornament-ring.middle {
+  width: 76px;
+  height: 76px;
+  border: 1px dashed rgba(245, 158, 11, 0.45);
+  animation: ringRotate 16s linear infinite reverse;
+}
+
+.ornament-ring.inner {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  animation: ringRotate 10s linear infinite;
+}
+
+@keyframes ringRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.ornament-star {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.7rem;
+  color: var(--gold-400);
+  text-shadow: 0 0 24px rgba(245, 158, 11, 0.6);
+  animation: starGlow 3s ease-in-out infinite alternate;
+  line-height: 1;
+}
+
+@keyframes starGlow {
+  0%   { text-shadow: 0 0 16px rgba(245, 158, 11, 0.4); }
+  100% { text-shadow: 0 0 48px rgba(245, 158, 11, 0.8), 0 0 96px rgba(245, 158, 11, 0.2); }
+}
+
+/* ── Bismillah ── */
+.hero-bismillah {
+  font-family: 'Amiri', serif;
+  font-size: 2.6rem;
+  color: var(--gold-300);
+  direction: rtl;
+  margin-bottom: 28px;
+  line-height: 1.9;
+  text-shadow: 0 0 40px rgba(245, 158, 11, 0.18);
+}
+
+/* ── Divider ── */
+.hero-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-divider .divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.5), transparent);
+}
+
+.hero-divider.gold .divider-line {
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.4), transparent);
+}
+
+.divider-gem {
+  font-size: 0.65rem;
+  color: var(--cyan-400);
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.divider-gem.gold {
+  color: var(--gold-400);
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
+
+/* ── Main Title ── */
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.hero-title-main {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--cyan-300) 0%, var(--emerald-400) 35%, var(--gold-400) 70%, var(--cyan-300) 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 24px rgba(6, 182, 212, 0.18));
+}
+
+.hero-title-year {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.1rem, 3vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  color: var(--gold-400);
+  text-shadow: 0 0 30px rgba(245, 158, 11, 0.35);
+}
+
+/* ── Mosque name ── */
+.hero-mosque {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  opacity: 0.85;
+}
+
+/* ── Description ── */
+.hero-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.75;
+  opacity: 0.8;
+}
+
+/* ── Corner bracket accents ── */
+.hero-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: rgba(6, 182, 212, 0.35);
+  border-style: solid;
+  pointer-events: none;
+}
+.hero-corner.tl { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+.hero-corner.tr { top: 12px; right: 12px; border-width: 1px 1px 0 0; }
+.hero-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 1px 1px; }
+.hero-corner.br { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+
+/* ══════════════════════════════════════════════════════════════
+   STATS GRID
+   ══════════════════════════════════════════════════════════════ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 44px;
+}
+
+.stat-card {
+  position: relative;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(6, 182, 212, 0.1);
+  border-radius: var(--radius);
+  padding: 28px 16px 24px;
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.45), 0 0 40px rgba(6, 182, 212, 0.08);
+}
+
+/* Top accent bar */
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan-500), var(--purple-500));
+  opacity: 0.6;
+}
+
+/* Bottom glow */
+.stat-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.3), transparent);
+}
+
+.stat-card.income::before {
+  background: linear-gradient(90deg, var(--emerald-500), var(--cyan-400));
+}
+.stat-card.income::after {
+  background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.3), transparent);
+}
+
+.stat-card.expense::before {
+  background: linear-gradient(90deg, #fb7185, var(--pink-500));
+}
+.stat-card.expense::after {
+  background: linear-gradient(90deg, transparent, rgba(251, 113, 133, 0.3), transparent);
+}
+
+.stat-card.saldo::before {
+  background: linear-gradient(90deg, var(--gold-600), var(--gold-300));
+}
+.stat-card.saldo::after {
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3), transparent);
+}
+
+.stat-icon {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+}
+
+.stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  font-weight: 700;
+  color: var(--cyan-300);
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+  word-break: break-all;
+  line-height: 1.3;
+}
+
+.stat-card.income .stat-value {
+  color: var(--emerald-400);
+  text-shadow: 0 0 20px rgba(52, 211, 153, 0.25);
+}
+.stat-card.expense .stat-value {
+  color: #fb7185;
+  text-shadow: 0 0 20px rgba(251, 113, 133, 0.25);
+}
+.stat-card.saldo .stat-value {
+  color: var(--gold-300);
+  text-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
+  animation: goldPulse 2.5s ease-in-out infinite alternate;
+}
+
+.stat-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hero-section {
+    padding: 52px 20px 44px;
+  }
+  .hero-bismillah {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 20px 10px 18px;
+  }
+  .hero-section {
+    padding: 40px 16px 36px;
+  }
+  .hero-bismillah {
+    font-size: 1.6rem;
+  }
+  .hero-ornament {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 28px;
+  }
+  .ornament-ring.outer  { width: 80px;  height: 80px;  }
+  .ornament-ring.middle { width: 56px;  height: 56px;  }
+  .ornament-ring.inner  { width: 34px;  height: 34px;  }
+  .ornament-star { font-size: 1.3rem; }
+}

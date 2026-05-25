@@ -46,7 +46,7 @@ app.get('/api/foto-file/:name', (req, res) => {
 // ── API: data pengqurban ──
 app.get('/api/pengqurban', (req, res) => {
   try {
-    const csvPath = path.join(DATA_DIR, 'Data Pengqurban.csv');
+    const csvPath = path.join(DATA_DIR, 'Data Pengqurban - Sheet1.csv');
     const raw = fs.readFileSync(csvPath, 'utf-8');
     const records = parse(raw, {
       columns: true,

@@ -74,6 +74,15 @@ const wahyuList: WahyuItem[] = [
   },
 ]
 
+function parseRp(val: string): number {
+  if (!val) return 0
+  return parseInt(val.replace(/[^0-9]/g, ''), 10) || 0
+}
+
+function formatRp(n: number): string {
+  return n.toLocaleString('id-ID')
+}
+
 export default function App() {
   const [page, setPage] = useState<Page>('home')
   const [pengqurban, setPengqurban] = useState<Pengqurban[]>([])
@@ -83,9 +92,9 @@ export default function App() {
   const [wahyuIdx, setWahyuIdx] = useState(0)
 
   useEffect(() => {
-    fetch('/api/pengqurban').then(r => r.json()).then(setPengqurban)
-    fetch('/api/realisasi').then(r => r.json()).then(setRealisasi)
-    fetch('/api/foto').then(r => r.json()).then(setFotoList)
+    fetch('/api/pengqurban').then(r => r.json()).then(d => Array.isArray(d) && setPengqurban(d)).catch(() => {})
+    fetch('/api/realisasi').then(r => r.json()).then(d => Array.isArray(d) && setRealisasi(d)).catch(() => {})
+    fetch('/api/foto').then(r => r.json()).then(d => Array.isArray(d) && setFotoList(d)).catch(() => {})
   }, [])
 
   // Auto-slide foto
@@ -143,7 +152,14 @@ export default function App() {
 
       {/* ── Main ── */}
       <main className="main">
-        {page === 'home' && <HomePage wahyuIdx={wahyuIdx} setWahyuIdx={setWahyuIdx} />}
+        {page === 'home' && (
+          <HomePage
+            wahyuIdx={wahyuIdx}
+            setWahyuIdx={setWahyuIdx}
+            pengqurban={pengqurban}
+            realisasi={realisasi}
+          />
+        )}
         {page === 'dokumentasi' && (
           <DokumentasiPage
             fotoList={fotoList}
@@ -167,31 +183,98 @@ export default function App() {
 }
 
 /* ================================================================
-   HOME PAGE — Futuristic Carousel
+   HOME PAGE
    ================================================================ */
 function HomePage({
   wahyuIdx,
   setWahyuIdx,
+  pengqurban,
+  realisasi,
 }: {
   wahyuIdx: number
   setWahyuIdx: (n: number) => void
+  pengqurban: Pengqurban[]
+  realisasi: Realisasi[]
 }) {
   const item = wahyuList[wahyuIdx]
 
+  const transaksi = realisasi.filter(r => r.No !== 'SALDO')
+  const totalPemasukan = transaksi.reduce((sum, r) => sum + parseRp(r.Pemasukan), 0)
+  const totalPengeluaran = transaksi.reduce((sum, r) => sum + parseRp(r.Pengeluaran), 0)
+  const saldo = totalPemasukan - totalPengeluaran
+  const jumlahPengqurban = pengqurban.length
+
+  const stats = [
+    { label: 'Pengqurban', value: String(jumlahPengqurban), icon: '👥', variant: '' },
+    { label: 'Total Pemasukan', value: `Rp${formatRp(totalPemasukan)}`, icon: '📥', variant: 'income' },
+    { label: 'Total Pengeluaran', value: `Rp${formatRp(totalPengeluaran)}`, icon: '📤', variant: 'expense' },
+    { label: 'Saldo Akhir', value: `Rp${formatRp(saldo)}`, icon: '💰', variant: 'saldo' },
+  ]
+
   return (
     <div className="page home-page">
-      {/* ── Info / Bismillah ── */}
-      <section className="section">
-        <div className="info-card-glass">
-          <h3>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h3>
-          <p>
-            Laporan keuangan dan dokumentasi pelaksanaan pemotongan hewan qurban
-            Mushalla As Salaam tahun 1447 H.
-          </p>
+
+      {/* ── Hero ── */}
+      <section className="hero-section">
+        {/* Glow backdrop */}
+        <div className="hero-glow" />
+
+        {/* Decorative ornament */}
+        <div className="hero-ornament" aria-hidden="true">
+          <div className="ornament-ring outer" />
+          <div className="ornament-ring middle" />
+          <div className="ornament-ring inner" />
+          <span className="ornament-star">✦</span>
         </div>
+
+        {/* Bismillah */}
+        <p className="hero-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+
+        {/* Decorative divider */}
+        <div className="hero-divider">
+          <span className="divider-line" />
+          <span className="divider-gem">◆</span>
+          <span className="divider-line" />
+        </div>
+
+        {/* Main title */}
+        <h1 className="hero-title">
+          <span className="hero-title-main">LAPORAN QURBAN</span>
+          <span className="hero-title-year">1447 H</span>
+        </h1>
+
+        <p className="hero-mosque">✦ &nbsp; Mushalla As Salaam &nbsp; ✦</p>
+
+        {/* Decorative divider bottom */}
+        <div className="hero-divider gold">
+          <span className="divider-line" />
+          <span className="divider-gem gold">❋</span>
+          <span className="divider-line" />
+        </div>
+
+        <p className="hero-desc">
+          Laporan keuangan dan dokumentasi pelaksanaan pemotongan hewan qurban
+        </p>
+
+        {/* Corner accents */}
+        <span className="hero-corner tl" aria-hidden="true" />
+        <span className="hero-corner tr" aria-hidden="true" />
+        <span className="hero-corner bl" aria-hidden="true" />
+        <span className="hero-corner br" aria-hidden="true" />
       </section>
 
-      {/* ── Carousel Hero ── */}
+      {/* ── Stats Grid ── */}
+      <section className="stats-grid">
+        {stats.map(s => (
+          <div key={s.label} className={`stat-card ${s.variant}`}>
+            <div className="stat-icon">{s.icon}</div>
+            <div className="stat-value">{s.value}</div>
+            <div className="stat-label">{s.label}</div>
+          </div>
+        ))}
+      </section>
+
+      {/* ── Wahyu Carousel ── */}
       <section className="wahyu-carousel">
         <div className="carousel-glow" />
         <div className="carousel-badge">
@@ -214,7 +297,6 @@ function HomePage({
           ))}
         </div>
       </section>
-
 
     </div>
   )
@@ -283,15 +365,6 @@ function DokumentasiPage({
 /* ================================================================
    REALISASI PAGE
    ================================================================ */
-function parseRp(val: string): number {
-  if (!val) return 0
-  return parseInt(val.replace(/[^0-9]/g, ''), 10) || 0
-}
-
-function formatRp(n: number): string {
-  return n.toLocaleString('id-ID')
-}
-
 function RealisasiPage({
   pengqurban,
   realisasi,
