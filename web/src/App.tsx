@@ -97,15 +97,6 @@ export default function App() {
     fetch('/api/foto').then(r => r.json()).then(d => Array.isArray(d) && setFotoList(d)).catch(() => {})
   }, [])
 
-  // Auto-slide foto
-  useEffect(() => {
-    if (fotoList.length === 0) return
-    const timer = setInterval(() => {
-      setSlideIndex(prev => (prev + 1) % fotoList.length)
-    }, 4000)
-    return () => clearInterval(timer)
-  }, [fotoList])
-
   // Auto-rotate ayat & hadits
   useEffect(() => {
     const timer = setInterval(() => {
