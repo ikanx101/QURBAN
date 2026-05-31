@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qurban 1447 H — Perumahan Villa Mutiara</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            hijau: { 50:'#f0faf4', 100:'#d9f2e3', 200:'#b3e5c8', 300:'#79cea4', 400:'#3db37e', 500:'#1e9660', 600:'#157a4e', 700:'#10613e', 800:'#0d4d31', 900:'#0a3d27' },
+            emas:  { 400:'#f4d03f', 500:'#d4a017', 600:'#b8860b' },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    * { font-family: 'Poppins', sans-serif; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .nav-btn.active { background-color: #157a4e; color: white; }
+    .nav-btn { transition: all 0.2s; }
+    .fade-in { animation: fadeIn 0.4s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .foto-item { cursor: pointer; overflow: hidden; border-radius: 0.5rem; }
+    .foto-item img { transition: transform 0.3s; width: 100%; height: 180px; object-fit: cover; }
+    .foto-item:hover img { transform: scale(1.05); }
+    #lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:1000; align-items:center; justify-content:center; }
+    #lightbox.open { display:flex; }
+    #lightbox img { max-width:90vw; max-height:90vh; object-fit:contain; border-radius:8px; }
+    table th { position: sticky; top: 0; z-index: 10; }
+    .saldo-row td { background-color: #d9f2e3 !important; font-weight: 700; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-hijau-700 text-white shadow-lg">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center gap-3">
+      <div class="text-3xl">🕌</div>
+      <div>
+        <h1 class="text-xl font-bold leading-tight">Qurban 1447 H</h1>
+        <p class="text-hijau-200 text-sm">Perumahan Villa Mutiara — 27 Mei 2026</p>
+      </div>
+    </div>
+    <!-- Nav tabs -->
+    <nav class="max-w-5xl mx-auto px-4 pb-0 flex gap-1 overflow-x-auto">
+      <button class="nav-btn active px-4 py-2 rounded-t-lg text-sm font-medium bg-hijau-600 text-white" onclick="showPage('beranda', this)">🏠 Beranda</button>
+      <button class="nav-btn px-4 py-2 rounded-t-lg text-sm font-medium text-hijau-100 hover:bg-hijau-600" onclick="showPage('pengqurban', this)">📋 Pengqurban</button>
+      <button class="nav-btn px-4 py-2 rounded-t-lg text-sm font-medium text-hijau-100 hover:bg-hijau-600" onclick="showPage('realisasi', this)">💰 Realisasi</button>
+      <button class="nav-btn px-4 py-2 rounded-t-lg text-sm font-medium text-hijau-100 hover:bg-hijau-600" onclick="showPage('galeri', this)">🖼️ Galeri</button>
+    </nav>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-6">
+
+    <!-- ── BERANDA ── -->
+    <section id="page-beranda" class="page active fade-in">
+      <!-- Video -->
+      <div class="bg-black rounded-xl overflow-hidden shadow-xl mb-6">
+        <video
+          id="main-video"
+          controls
+          class="w-full max-h-[480px]"
+          poster=""
+        >
+          <source src="/video.mp4" type="video/mp4" />
+          Browser Anda tidak mendukung pemutar video.
+        </video>
+      </div>
+
+      <!-- Welcome card -->
+      <div class="bg-white rounded-xl shadow p-6 mb-5 border-l-4 border-hijau-500">
+        <h2 class="text-2xl font-bold text-hijau-800 mb-2">Bismillahirrahmanirrahim</h2>
+        <p class="text-gray-600 leading-relaxed">
+          Alhamdulillah, rangkaian ibadah qurban 1447 H di lingkungan Perumahan Villa Mutiara
+          telah terlaksana dengan lancar. Semoga amal ibadah ini diterima oleh Allah SWT dan
+          membawa keberkahan bagi seluruh keluarga pengqurban dan penerima manfaat.
+        </p>
+      </div>
+
+      <!-- Ringkasan cards -->
+      <div id="ringkasan" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow p-4 text-center border-t-4 border-hijau-500">
+          <div class="text-3xl font-bold text-hijau-700" id="jml-sapi">—</div>
+          <div class="text-sm text-gray-500 mt-1">Sapi</div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4 text-center border-t-4 border-emas-500">
+          <div class="text-3xl font-bold text-yellow-600" id="jml-kambing">—</div>
+          <div class="text-sm text-gray-500 mt-1">Kambing</div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4 text-center border-t-4 border-blue-500">
+          <div class="text-3xl font-bold text-blue-700" id="jml-peserta">—</div>
+          <div class="text-sm text-gray-500 mt-1">Peserta</div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4 text-center border-t-4 border-purple-500">
+          <div class="text-3xl font-bold text-purple-700" id="saldo-text">—</div>
+          <div class="text-sm text-gray-500 mt-1">Saldo Akhir</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PENGQURBAN ── -->
+    <section id="page-pengqurban" class="page fade-in">
+      <div class="bg-white rounded-xl shadow overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-hijau-800">Daftar Pengqurban</h2>
+          <span id="jml-total" class="bg-hijau-100 text-hijau-800 text-xs font-medium px-2.5 py-1 rounded-full"></span>
+        </div>
+        <div class="overflow-x-auto max-h-[70vh] overflow-y-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-hijau-700 text-white">
+              <tr>
+                <th class="px-4 py-3 text-left w-10">No</th>
+                <th class="px-4 py-3 text-left">Keterangan</th>
+                <th class="px-4 py-3 text-left">Nama</th>
+                <th class="px-4 py-3 text-left">Alamat</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-pengqurban" class="divide-y divide-gray-100">
+              <tr><td colspan="4" class="px-4 py-8 text-center text-gray-400">Memuat data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── REALISASI ── -->
+    <section id="page-realisasi" class="page fade-in">
+      <!-- Summary cards -->
+      <div class="grid grid-cols-3 gap-4 mb-5" id="realisasi-summary">
+        <div class="bg-hijau-50 border border-hijau-200 rounded-xl p-4 text-center">
+          <div class="text-xs text-hijau-600 mb-1 font-medium uppercase tracking-wide">Total Pemasukan</div>
+          <div class="text-xl font-bold text-hijau-700" id="total-masuk">—</div>
+        </div>
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
+          <div class="text-xs text-red-600 mb-1 font-medium uppercase tracking-wide">Total Pengeluaran</div>
+          <div class="text-xl font-bold text-red-700" id="total-keluar">—</div>
+        </div>
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+          <div class="text-xs text-blue-600 mb-1 font-medium uppercase tracking-wide">Saldo Akhir</div>
+          <div class="text-xl font-bold text-blue-700" id="total-saldo">—</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl shadow overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+          <h2 class="text-lg font-semibold text-hijau-800">Realisasi Keuangan Qurban 1447 H</h2>
+        </div>
+        <div class="overflow-x-auto max-h-[65vh] overflow-y-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-hijau-700 text-white">
+              <tr>
+                <th class="px-3 py-3 text-left w-8">No</th>
+                <th class="px-3 py-3 text-left">Tanggal</th>
+                <th class="px-3 py-3 text-left">Keterangan</th>
+                <th class="px-3 py-3 text-right">Pemasukan</th>
+                <th class="px-3 py-3 text-right">Pengeluaran</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-realisasi" class="divide-y divide-gray-100">
+              <tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">Memuat data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── GALERI ── -->
+    <section id="page-galeri" class="page fade-in">
+      <div class="bg-white rounded-xl shadow p-4">
+        <div class="flex items-center justify-between mb-4 px-2">
+          <h2 class="text-lg font-semibold text-hijau-800">Galeri Foto Qurban</h2>
+          <span id="jml-foto" class="bg-hijau-100 text-hijau-800 text-xs font-medium px-2.5 py-1 rounded-full"></span>
+        </div>
+        <div id="foto-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          <div class="col-span-full py-8 text-center text-gray-400">Memuat foto…</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox -->
+  <div id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="" />
+    <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl font-bold leading-none">&times;</button>
+    <button id="lb-prev" onclick="event.stopPropagation(); lbNav(-1)" class="absolute left-4 text-white text-4xl font-bold">&#8249;</button>
+    <button id="lb-next" onclick="event.stopPropagation(); lbNav(1)"  class="absolute right-16 text-white text-4xl font-bold">&#8250;</button>
+  </div>
+
+  <footer class="text-center text-xs text-gray-400 py-6">
+    Qurban 1447 H — Perumahan Villa Mutiara
+  </footer>
+
+  <script>
+    // ── Navigation ──
+    function showPage(id, btn) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.remove('active', 'bg-hijau-600', 'text-white');
+        b.classList.add('text-hijau-100');
+      });
+      const page = document.getElementById('page-' + id);
+      page.classList.add('active');
+      // re-trigger fade
+      page.classList.remove('fade-in');
+      void page.offsetWidth;
+      page.classList.add('fade-in');
+      btn.classList.add('active');
+      btn.classList.remove('text-hijau-100');
+
+      if (id === 'galeri' && !galeriLoaded) loadGaleri();
+    }
+
+    // ── Load Pengqurban ──
+    let galeriLoaded = false;
+    let allFotos = [];
+    let lbIndex = 0;
+
+    async function loadPengqurban() {
+      const res = await fetch('/api/pengqurban');
+      const data = await res.json();
+      const tbody = document.getElementById('tbl-pengqurban');
+      let sapiSet = new Set(), kambingSet = new Set();
+      tbody.innerHTML = data.map((r, i) => {
+        const ket = r.Keterangan || '';
+        const rowClass = ket.startsWith('Sapi') ? '' : 'bg-yellow-50';
+        if (ket.startsWith('Sapi')) sapiSet.add(ket);
+        if (ket.startsWith('Kambing')) kambingSet.add(ket);
+        return `<tr class="${rowClass} hover:bg-gray-50">
+          <td class="px-4 py-2.5 text-gray-500">${r.No}</td>
+          <td class="px-4 py-2.5">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${ket.startsWith('Sapi') ? 'bg-hijau-100 text-hijau-800' : 'bg-yellow-100 text-yellow-800'}">
+              ${ket}
+            </span>
+          </td>
+          <td class="px-4 py-2.5 font-medium text-gray-800">${r.Nama}</td>
+          <td class="px-4 py-2.5 text-gray-500">${r.Alamat}</td>
+        </tr>`;
+      }).join('');
+      document.getElementById('jml-total').textContent = `${data.length} peserta`;
+      document.getElementById('jml-peserta').textContent = data.length;
+      document.getElementById('jml-sapi').textContent = sapiSet.size;
+      document.getElementById('jml-kambing').textContent = kambingSet.size;
+    }
+
+    // ── Load Realisasi ──
+    async function loadRealisasi() {
+      const res = await fetch('/api/realisasi');
+      const data = await res.json();
+      const tbody = document.getElementById('tbl-realisasi');
+
+      tbody.innerHTML = data.map((r, i) => {
+        const isSaldo = (r.No === '' || r.No === undefined || r.Keterangan?.toLowerCase().includes('saldo') || !r.Tanggal && !r.No);
+        const trClass = isSaldo ? 'saldo-row' : (i % 2 === 0 ? '' : 'bg-gray-50');
+        const masuk = r.Pemasukan ? `<span class="text-hijau-700 font-medium">${r.Pemasukan}</span>` : '<span class="text-gray-300">—</span>';
+        const keluar = r.Pengeluaran ? `<span class="text-red-600 font-medium">${r.Pengeluaran}</span>` : '<span class="text-gray-300">—</span>';
+        return `<tr class="${trClass} hover:bg-hijau-50">
+          <td class="px-3 py-2.5 text-gray-400 text-xs">${r.No || ''}</td>
+          <td class="px-3 py-2.5 text-gray-500 text-xs whitespace-nowrap">${r.Tanggal || ''}</td>
+          <td class="px-3 py-2.5 text-gray-700">${r.Keterangan || ''}</td>
+          <td class="px-3 py-2.5 text-right">${masuk}</td>
+          <td class="px-3 py-2.5 text-right">${keluar}</td>
+        </tr>`;
+      }).join('');
+
+      // Find saldo row for summary
+      const saldoRow = data.find(r => r.Keterangan?.toLowerCase().includes('saldo') || (r.Pemasukan && r.Pengeluaran && !r.No));
+      if (saldoRow || data[data.length - 1]) {
+        const last = saldoRow || data[data.length - 1];
+        if (last.Pemasukan) document.getElementById('total-masuk').textContent = last.Pemasukan;
+        if (last.Pengeluaran) document.getElementById('total-keluar').textContent = last.Pengeluaran;
+        // Saldo is the last cell
+        const saldoVal = Object.values(last).filter(v => v && v !== '' && v !== last.No && v !== last.Tanggal && v !== last.Keterangan && v !== last.Pemasukan && v !== last.Pengeluaran)[0];
+        if (saldoVal) {
+          document.getElementById('total-saldo').textContent = saldoVal;
+          document.getElementById('saldo-text').textContent = saldoVal;
+        }
+      }
+    }
+
+    // ── Load Galeri ──
+    async function loadGaleri() {
+      galeriLoaded = true;
+      const res = await fetch('/api/foto');
+      allFotos = await res.json();
+      const grid = document.getElementById('foto-grid');
+      document.getElementById('jml-foto').textContent = `${allFotos.length} foto`;
+      grid.innerHTML = allFotos.map((url, i) =>
+        `<div class="foto-item shadow" onclick="openLightbox(${i})">
+          <img src="${url}" alt="Foto ${i+1}" loading="lazy" />
+        </div>`
+      ).join('');
+    }
+
+    // ── Lightbox ──
+    function openLightbox(i) {
+      lbIndex = i;
+      document.getElementById('lightbox-img').src = allFotos[i];
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+    function lbNav(dir) {
+      lbIndex = (lbIndex + dir + allFotos.length) % allFotos.length;
+      document.getElementById('lightbox-img').src = allFotos[lbIndex];
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') lbNav(1);
+      if (e.key === 'ArrowLeft') lbNav(-1);
+    });
+
+    // ── Init ──
+    loadPengqurban();
+    loadRealisasi();
+  </script>
+</body>
+</html>
